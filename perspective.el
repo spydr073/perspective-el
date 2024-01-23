@@ -103,7 +103,9 @@ If 'created, then sort by time created (latest first)."
   :group 'perspective-mode
   :type '(choice (const :tag "By Name"          name)
                  (const :tag "By Time Accessed" access)
-                 (const :tag "By Time Created"  created)))
+                 (const :tag "By Time Created"  created)
+                 (const :tag "By Time Created (Reverse)" created-reverse)
+                 ))
 
 (defcustom persp-frame-global-perspective-name "GLOBAL"
   "The name for a frames global perspective."
@@ -596,7 +598,14 @@ first."
            (mapcar 'persp-name
                    (sort persps (lambda (a b)
                                   (time-less-p (persp-created-time b)
-                                               (persp-created-time a)))))))))
+                                               (persp-created-time a))))))
+
+          ((eq persp-sort 'created-reverse)
+           (mapcar 'persp-name
+                   (sort persps (lambda (a b)
+                                  (time-less-p (persp-created-time a)
+                                               (persp-created-time b))))))
+          )))
 
 (defun persp-all-names (&optional not-frame)
   "Return a list of the perspective names for all frames.
